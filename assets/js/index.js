@@ -67,3 +67,14 @@ const handleNoteSave = function () {
     });
 };
 
+
+const handleNoteView = function () {
+    activeNote = $(this).data();
+    renderActiveNote();
+}
+
+const handleRenderSaveBtn = function () {
+    if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
+        $saveNoteBtn.show();
+    }
+}
