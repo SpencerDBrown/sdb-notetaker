@@ -71,10 +71,63 @@ const handleNoteSave = function () {
 const handleNoteView = function () {
     activeNote = $(this).data();
     renderActiveNote();
-}
+};
+
+const handleNewNoteView = function () {
+    actriveNote = $(this).data();
+    renderActiveNote();
+};
 
 const handleRenderSaveBtn = function () {
     if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
         $saveNoteBtn.show();
+    } else {
+        $saveNoteBtn.show();
     }
+};
+
+const renderNoteList = (notes) => {
+    $noteList.empty();
+
+    const noteListItems = [];
+
+    const create$li = (text, withDeleteButton = true) => {
+        const $li = $("<li class='list-group-item'>");
+        const $span = $("<span>").text(text);
+        $li.append($span);
+
+        if (withDeleteButton) {
+            const $delBtn = $(
+                "<i class = 'fas fa-trash-alt float-right text-danger delete-note'>"
+            );
+            $li.append($delBtn);
+        }
+        return $li;
+    };
+
+    if (notes.length === 0) {
+        noteListItems.push(create$li("There are no saved notes.", false));
+    }
+
+    notes.forEach((note) => {
+        const $li = creat$li(note.title).data(note);
+        noteListItems.push($li);
+    });
+
+    $noteList.append(noteListItems);
+};
+
+const getAndRenderNotes = () => {
+    let returned = getNote();
+    console.log(returned)
+    return getNotes().then(renderNoteList);
 }
+
+$saveNoteBtn.on("click", handleNoteSave);
+$noteList.on("click", ".list-group-item", handleNoteView);
+$newNoteBtn.on("click", handleNewNoteView);
+$noteList.on("click", ".delete-note", handleNoteDelete);
+$noteTitle.on("keyup", handleRenderSaveBtn);
+$noteText.on("keyup", handleRenderSaveBtn);
+
+getAndRenderNotes();
